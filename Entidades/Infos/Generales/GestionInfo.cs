@@ -9,9 +9,9 @@ namespace Entidades.Infos.Generales
 	public class GestionInfo
 	{
 		public int Id { get; set; }
-		public string Nombre { get; set; }
-		public string Actividad {  get; set; }
-		public string Respuesta { get; set; }
+		public string Nombre { get; set; } = string.Empty; 
+		public string Actividad {  get; set; } = string.Empty;
+		public string Resultado { get; set; } = string.Empty;
 		public DateOnly Fecha { get; set; }
 		public TimeOnly Hora {  get; set; } 
 	}

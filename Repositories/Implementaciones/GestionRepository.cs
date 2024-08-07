@@ -28,7 +28,7 @@ namespace Repositories.Implementaciones
 			{
 				Nombre = $"{x.Persona.Nombre} {x.Persona.ApellidoPaterno} {x.Persona.ApellidoMaterno}",
 				Actividad = x.Actividad,
-				Respuesta = x.Resultado,
+				Resultado = x.Resultado,
 				Fecha = x.Fecha,
 				Hora = x.Hora
 			})
