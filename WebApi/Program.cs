@@ -79,14 +79,15 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-//app.UseBlazorFrameworkFiles();
-//app.UseStaticFiles();
+app.UseBlazorFrameworkFiles();
+app.UseStaticFiles();
 app.UseRouting();
 // Autenticacion (Validacion de identidad)
 app.UseAuthentication();
 // Autorizacion (Validacion de permisos)
 app.UseAuthorization();
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 await using var scope = app.Services.CreateAsyncScope();
 {
