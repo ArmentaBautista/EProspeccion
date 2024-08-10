@@ -13,22 +13,24 @@ namespace DataAccess.Sistema
 		public static async Task Crear(IServiceProvider service)
 		{
 			// UserManager (repositorio de usuarios)
-			var userManager = service.GetRequiredService<UserManager<EIdentity>>();
+			var userManager = service.GetRequiredService<UserManager<UsuarioIdentity>>();
 
 			// RoleManager (repositorio de roles)
 			var roleManager = service.GetRequiredService<RoleManager<IdentityRole>>();
 
 			// Crear roles
 			var adminRole = new IdentityRole("Administrador");
-			var clienteRole = new IdentityRole("Gestor");
+			var userRole = new IdentityRole("Usuario");
 
 			await roleManager.CreateAsync(adminRole);
-			await roleManager.CreateAsync(clienteRole);
+			await roleManager.CreateAsync(userRole);
 
 			// Usuario Administrador
-			var adminUser = new EIdentity
+			var adminUser = new UsuarioIdentity
 			{
-				NombreCompleto = "Administrador del Sistema",
+				Nombre = "Administrador del Sistema",
+				ApellidoPaterno ="",
+				ApellidoMaterno = "",
 				UserName = "admin",
 				Email = "carlos.armenta@intelix.mx",
 				EmailConfirmed = true

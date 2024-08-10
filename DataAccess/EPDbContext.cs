@@ -7,7 +7,7 @@ using Entidades;
 
 namespace DataAccess
 {
-	public class EPDbContext : IdentityDbContext<EIdentity>
+	public class EPDbContext : IdentityDbContext<UsuarioIdentity>
 	{
 
 		public EPDbContext(DbContextOptions<EPDbContext> options)

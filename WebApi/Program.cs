@@ -31,7 +31,7 @@ builder.Services.AddTransient<IPersonaRepository,PersonaRepository>();
 builder.Services.AddTransient<IGestionRepository,GestionRepository>();
 
 // Configuramos ASP.NET Core Identity
-builder.Services.AddIdentity<EIdentity, IdentityRole>(policies =>
+builder.Services.AddIdentity<UsuarioIdentity, IdentityRole>(policies =>
 {
 	// Politicas de clave
 	policies.Password.RequireDigit = true;
