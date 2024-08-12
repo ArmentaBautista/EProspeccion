@@ -1,4 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@inject SweetAlertService Swal
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorClient</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -24,6 +29,20 @@
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Weather
             </NavLink>
         </div>
+        <div>
+            <AuthorizeView>
+                <Authorized>
+                    <NavLink class="navbar-text text-white">
+                        <i class="bi bi-person-circle me-1"></i> @context.User.Identity!.Name
+                    </NavLink>
+                    <button class="btn btn-outline-info" @onclick="CerrarSesion"><i class="bi bi-door-open me-1"></i>Salir</button>
+                </Authorized>
+                <NotAuthorized>
+                    <NavLink class="btn btn-outline-info" href="account/login"><i class="bi bi-box-arrow-in-right me-1"></i>Ingresar</NavLink>
+                    <NavLink class="btn btn-outline-info" href="account/register"><i class="bi bi-person-add me-1"></i>Registrarse</NavLink>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
     </nav>
 </div>
 
@@ -35,5 +54,24 @@
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    private async Task CerrarSesion()
+    {
+        var result = await Swal.FireAsync(new SweetAlertOptions()
+            {
+                Title = "Desea salir?",
+                Icon = SweetAlertIcon.Question,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Sí",
+                CancelButtonText = "Por ahora no"
+            });
+
+        if (result.IsConfirmed)
+        {
+            var auth = (AuthenticationService)AuthenticationStateProvider;
+            await auth.Authenticate(null);
+            NavigationManager.NavigateTo("/", forceLoad: true);
+        }
     }
 }

@@ -29,6 +29,7 @@ builder.Services.AddDbContext<EPDbContext>(options =>
 });
 builder.Services.AddTransient<IPersonaRepository,PersonaRepository>();
 builder.Services.AddTransient<IGestionRepository,GestionRepository>();
+builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
 
 // Configuramos ASP.NET Core Identity
 builder.Services.AddIdentity<UsuarioIdentity, IdentityRole>(policies =>

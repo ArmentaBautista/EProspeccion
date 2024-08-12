@@ -1,0 +1,72 @@
+﻿@page "/account/login"
+@inject IUserProxy UserProxy
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IToastService ToastService
+
+<PageTitle>Inicio de Sesion</PageTitle>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card shadow-lg mt-5">
+                <div class="card-header">
+                    <h3>Inicio de Sesión</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="LoginDtoRequest" OnValidSubmit="ValidLogin">
+                        <DataAnnotationsValidator />
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username" 
+                                   @bind-value="LoginDtoRequest.Usuario" placeholder="Usuario"/>
+                            <label for="username">Usuario</label>
+                            <ValidationMessage For="@(() => LoginDtoRequest.Usuario)" />
+                        </div>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password" 
+                                   @bind-value="LoginDtoRequest.Password" />
+                            <label for="password">Clave</label>
+                            <ValidationMessage For="@(() => LoginDtoRequest.Password)" />
+                        </div>
+                        <div class="d-grid gap-1 mt-4 mb-1">
+                            <button class="btn btn-primary" type="submit">Ingresar</button>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <NavLink class="nav-link" href="account/register">¿No tienes una cuenta? Regístrate</NavLink>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private LoginDtoRequest LoginDtoRequest { get; set; } = new();
+
+    private async Task ValidLogin()
+    {
+        try
+        {
+            var response = await UserProxy.Login(LoginDtoRequest);
+            if (response.Exito)
+            {
+                var auth = (AuthenticationService)AuthenticationStateProvider;
+                await auth.Authenticate(response);
+
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                ToastService.ShowWarning(response.MensajeError!);
+            }
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+    }
+}

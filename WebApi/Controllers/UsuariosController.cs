@@ -12,6 +12,7 @@ using System.Security;
 using System.Security.Claims;
 using System.Text;
 using Entidades.Sistema;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebApi.Controllers
 {

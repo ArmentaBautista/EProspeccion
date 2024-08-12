@@ -5,6 +5,7 @@ using Entidades.Infos;
 using Repositories.Interfaces;
 using Dto.Request;
 using Dto.Response;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace WebApi.Controllers
 {
@@ -102,7 +103,8 @@ namespace WebApi.Controllers
 		}
 
 		[HttpDelete("{id:int}")]
-		public async Task<IActionResult> Delete(int id)
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> Delete(int id)
 		{
 			await _repository.DeleteAsync(id);
 

@@ -1,0 +1,96 @@
+﻿@page "/account/register"
+@using BlazorClient.Proxy
+@inject IUserProxy UserProxy
+@inject NavigationManager NavigationManager
+@inject IToastService ToastService
+
+<PageTitle>Inicio de Sesion</PageTitle>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card shadow-lg mt-5">
+                <div class="card-header">
+                    <h3>Crear cuenta</h3>
+                </div>
+                <div class="card-body">
+                    <EditForm Model="Request" OnValidSubmit="ValidRegister">
+                        <DataAnnotationsValidator />
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="nombre"
+                                   @bind-value="Request.Nombre" placeholder="Usuario" />
+                            <label for="nombre">Nombre Completo</label>
+                            <ValidationMessage For="@(() => Request.Nombre)" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="apellidoPaterno"
+                                   @bind-value="Request.ApellidoPaterno" placeholder="Usuario" />
+                            <label for="nombre">Apellido Paterno</label>
+                            <ValidationMessage For="@(() => Request.ApellidoPaterno)" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="apellidoMaterno"
+                                   @bind-value="Request.ApellidoMaterno" placeholder="Usuario" />
+                            <label for="nombre">Apellido Materno</label>
+                            <ValidationMessage For="@(() => Request.ApellidoMaterno)" />
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="username"
+                                   @bind-value="Request.NombreUsuario" placeholder="Usuario" />
+                            <label for="username">Usuario</label>
+                            <ValidationMessage For="@(() => Request.NombreUsuario)" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="email"
+                                   @bind-value="Request.Email" placeholder="usuario@mail.com" />
+                            <label for="email">Correo</label>
+                            <ValidationMessage For="@(() => Request.Email)" />
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="password"
+                                   @bind-value="Request.Password" />
+                            <label for="password">Clave</label>
+                            <ValidationMessage For="@(() => Request.Password)" />
+                        </div>
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="passwordConfirm"
+                                   @bind-value="Request.ConfirmPassword" />
+                            <label for="passwordConfirm">Confirmar Clave</label>
+                            <ValidationMessage For="@(() => Request.ConfirmPassword)" />
+                        </div>
+                        <div class="d-grid gap-1 mt-4 mb-1">
+                            <button class="btn btn-primary" type="submit">Crear cuenta</button>
+                        </div>
+                    </EditForm>
+                </div>
+                <div class="card-footer text-center py-3">
+                    <div class="small">
+                        <NavLink class="nav-link" href="account/login">¿Ya tienes una cuenta? Inicia Sesión</NavLink>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private RegistrarUsuarioDto Request { get; set; } = new();
+
+    private async Task ValidRegister()
+    {
+        try
+        {
+            await UserProxy.Register(Request);
+
+            ToastService.ShowSuccess("Su cuenta ha sido creada exitosamente");
+
+            NavigationManager.NavigateTo("/account/login");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+    }
+}
