@@ -41,7 +41,7 @@ else
                     <td>@item.DireccionDomicilio</td>
                     <td>
                         <button class="btn btn-primary" @onclick="() => Editar(item.Id)"><i class="bi bi-pencil-square"></i></button>
-                        <button class="btn btn-danger" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash"></i></button>
+                        <button class="btn btn-danger" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash3-fill"></i></button>
                     </td>
                 </tr>
             }
@@ -80,7 +80,7 @@ else
         SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
             {
                 Title = "Esta seguro?",
-                Text = "Esta acción borrará el registro",
+                Text = $"Esta acción borrará el registro {id}",
                 Icon = SweetAlertIcon.Warning,
                 ShowCancelButton = true,
                 ConfirmButtonText = "Sí, bórralo!",
@@ -89,7 +89,7 @@ else
 
         if (result.IsConfirmed)
         {
-            await HttpClient.DeleteAsync($"api/persona/{id}");
+            await HttpClient.DeleteAsync($"api/Personas/{id}");
             Lista = await HttpClient.GetFromJsonAsync<ICollection<PersonaDTOResponse>>("api/Personas");
         }
     }

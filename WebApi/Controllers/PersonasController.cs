@@ -112,9 +112,11 @@ namespace WebApi.Controllers
 		}
 
 		[HttpDelete("{id:int}")]
-		public async Task<IActionResult> Delete(int id)
+        [AllowAnonymous]
+        public async Task<IActionResult> Delete(int id)
 		{
-			await _repository.DeleteAsync(id);
+            _logger.LogInformation($"Persona {id}");
+            await _repository.DeleteAsync(id);
 
 			return Ok();
 		}

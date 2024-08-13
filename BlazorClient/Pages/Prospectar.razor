@@ -4,5 +4,116 @@
 @inject SweetAlertService Swal
 
 <PageTitle>Prospección de Personas</PageTitle>
-<h3>Gestión</h3>
+<h3>Gestiones</h3>
+
+<NavLink class="btn btn-primary mb-5" href="productos/new"><i class="bi bi-plus-circle me-1"></i>Nuevo</NavLink>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            <label for="filtro" class="form-label">Filtro por nombre:</label>
+        </div>
+        <div class="col-5">
+            <input type="search" id="filtro" class="form-control" @bind-value="Filtro" />
+
+        </div>
+        <div class="col-1">
+            <button type="button" class="btn btn-primary" @onclick="Buscar"><i class="bi bi-search"></i></button>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr class="table-dark">
+                    <td>Nombre</td>
+                    <td>Precio</td>
+                    <td>Categoria</td>
+                    <td>Marca</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Lista is null)
+                {
+                <td colspan="5"><p class="alert alert-info">Cargando...</p></td>
+                }
+                else if (!Lista.Any())
+                {
+                <td colspan="5"><p class="alert alert-danger">No se encontraron datos</p></td>
+                }
+                else
+                {
+                    @foreach (var item in Lista)
+                    {
+                    <tr>
+                        <td>@item.Nombre</td>
+                        <td>$ @item.Precio.ToString("N2")</td>
+                        <td>@item.Categoria</td>
+                        <td>@item.Marca</td>
+                        <td>
+                            <button class="btn btn-primary" @onclick="() => Editar(item.Id)"><i class="bi bi-pencil-square"></i></button>
+                            <button class="btn btn-danger" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash"></i></button>
+                        </td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<LoadingComponent IsLoading="Cargando" />
+
+@code {
+
+    public ICollection<ProductoDtoResponse>? Lista { get; set; }
+    public string? Filtro { get; set; }
+    public bool Cargando { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Buscar();
+    }
+
+    private async Task Buscar()
+    {
+        try
+        {
+            Cargando = true;
+            Lista = await HttpClient.GetFromJsonAsync<ICollection<ProductoDtoResponse>>($"api/Productos?filtro={Filtro}");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
+        finally
+        {
+            Cargando = false;
+        }
+    }
+
+    private void Editar(int id)
+    {
+        NavigationManager.NavigateTo($"/productos/edit/{id}");
+    }
+
+    private async Task Eliminar(int id)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = "Esta acción borrará el registro",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Sí, bórralo!",
+                CancelButtonText = "Por ahora no"
+            });
+
+        if (result.IsConfirmed)
+        {
+            await HttpClient.DeleteAsync($"api/Productos/{id}");
+            await Buscar();
+        }
+    }
+}
 
