@@ -1,0 +1,37 @@
+﻿@page "/Personas/edit/{Id:int}"
+
+@attribute [Authorize(Roles = Constantes.RolAdministrador)]
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<PersonaEditComponent NombreBoton="Actualizar"
+                      Titulo="Actualizaicón de Persona"
+                      Request="Model"
+                      OnBotonSubmit="Actualizar" />
+
+
+@code 
+{
+
+    [Parameter]
+    public int Id { get; set; }
+
+    public PersonaDtoRequest Model { get; set; } = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var response = await HttpClient.GetFromJsonAsync<PersonaDtoRequest>($"api/Personas/{Id}");
+        if (response is not null)
+        {
+            Model = response;
+        }
+    }
+
+
+    private async Task Actualizar()
+    {
+        await HttpClient.PutAsJsonAsync($"api/Personas/{Id}", Model);
+        NavigationManager.NavigateTo("/Personas");
+    }
+}

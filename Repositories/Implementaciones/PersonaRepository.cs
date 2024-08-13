@@ -25,9 +25,13 @@ namespace Repositories.Implementaciones
 				.Select(x => new Persona 
 				{
 					Id = x.Id,
-					Nombre = $"{x.Nombre} {x.ApellidoPaterno} {x.ApellidoMaterno}",
+					Nombre = x.Nombre,
+					ApellidoPaterno= x.ApellidoPaterno,
+					ApellidoMaterno= x.ApellidoMaterno,
 					FechaNacimiento=x.FechaNacimiento,
-					Rfc=x.Rfc
+					Rfc=x.Rfc,
+					TelefonoCelular=x.TelefonoCelular,
+					DireccionDomicilio=x.DireccionDomicilio
 				})
 				.ToListAsync();
 		}

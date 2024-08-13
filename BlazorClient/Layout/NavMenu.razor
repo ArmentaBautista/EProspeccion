@@ -5,7 +5,7 @@
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">BlazorClient</a>
+        <a class="navbar-brand" href="">Prospección de Aspirantes a Socios</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -35,6 +35,16 @@
                     <NavLink class="navbar-text text-white">
                         <i class="bi bi-person-circle me-1"></i> @context.User.Identity!.Name
                     </NavLink>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="Personas">
+                            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Personas
+                        </NavLink>
+                    </div>
+                    <div class="nav-item px-3">
+                        <NavLink class="nav-link" href="Prospectar">
+                            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Prospectar
+                        </NavLink>
+                    </div>
                     <button class="btn btn-outline-info" @onclick="CerrarSesion"><i class="bi bi-door-open me-1"></i>Salir</button>
                 </Authorized>
                 <NotAuthorized>

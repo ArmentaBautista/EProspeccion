@@ -1,0 +1,96 @@
+﻿@page "/Personas"
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@inject SweetAlertService Swal
+
+<PageTitle>Personas (Aspirantes / Socios)</PageTitle>
+<h3>Lista de Personas</h3>
+
+<NavLink href="Personas/new" class="btn btn-primary mb-5">
+	<i class="bi bi-plus-square-fill-nav-menu me-1"></i>Registrar Persona
+</NavLink>
+
+@if (Lista is null)
+{
+	<p>Cargando...</p>
+}
+else
+{
+	<table class="table table-bordered table-light">
+        <thead>
+            <tr class="table-dark">
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellido Paterno</th>
+                <th>Apellido Materno</th>
+                <th>Celular</th>
+                <th>Dirección</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Lista)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nombre</td>
+                    <td>@item.ApellidoPaterno</td>
+                    <td>@item.ApellidoMaterno</td>
+                    <td>@item.TelefonoCelular</td>
+                    <td>@item.DireccionDomicilio</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => Editar(item.Id)"><i class="bi bi-pencil-square"></i></button>
+                        <button class="btn btn-danger" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash"></i></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+	</table>		
+}
+
+@code {
+    public ICollection<PersonaDTOResponse>? Lista { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Lista = await HttpClient.GetFromJsonAsync<ICollection<PersonaDTOResponse>>("api/Personas");
+        if (Lista is null || Lista.Count == 0)
+        {
+            Lista = new List<PersonaDTOResponse>();
+            Lista.Add(new PersonaDTOResponse()
+                {
+                    Id = 1,
+                    Nombre = "Zoe",
+                    ApellidoPaterno = "Armenta",
+                    ApellidoMaterno = "Roque",
+                    DireccionDomicilio="Av siempre viva",
+                    TelefonoCelular="2451023027"
+                });
+        }
+    }
+
+    private void Editar(int id)
+    {
+        NavigationManager.NavigateTo($"/Personas/edit/{id}");
+    }
+
+    private async Task Eliminar(int id)
+    {
+        SweetAlertResult result = await Swal.FireAsync(new SweetAlertOptions
+            {
+                Title = "Esta seguro?",
+                Text = "Esta acción borrará el registro",
+                Icon = SweetAlertIcon.Warning,
+                ShowCancelButton = true,
+                ConfirmButtonText = "Sí, bórralo!",
+                CancelButtonText = "Por ahora no"
+            });
+
+        if (result.IsConfirmed)
+        {
+            await HttpClient.DeleteAsync($"api/persona/{id}");
+            Lista = await HttpClient.GetFromJsonAsync<ICollection<PersonaDTOResponse>>("api/Personas");
+        }
+    }
+}

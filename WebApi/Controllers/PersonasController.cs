@@ -5,6 +5,7 @@ using Entidades.Infos;
 using Repositories.Interfaces;
 using Dto.Request;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Dto.Response;
 
 namespace WebApi.Controllers
 {
@@ -28,9 +29,23 @@ namespace WebApi.Controllers
 		public async Task<IActionResult> Get()
 		{
 			var personas = await _repository.ListMinimalAsync();
-			_logger.LogInformation("Personas cargadas");
+			var personasDto = personas.Select(x => new PersonaDTOResponse
+			{
+				Id = x.Id,
+				Nombre = x.Nombre,
+				ApellidoPaterno = x.ApellidoPaterno,
+				ApellidoMaterno = x.ApellidoMaterno,
+				DireccionDomicilio = x.DireccionDomicilio,
+				TelefonoCelular = x.TelefonoCelular
+			});
 
-			return Ok(personas);
+            _logger.LogInformation("Personas cargadas");
+			foreach (var persona in personasDto)
+			{
+				_logger.LogInformation($"{persona.Id} {persona.Nombre}");
+			}
+
+			return Ok(personasDto);
 		}
 
 		[HttpGet("{id:int}")]

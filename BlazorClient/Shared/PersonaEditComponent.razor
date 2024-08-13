@@ -1,0 +1,76 @@
+﻿<h2 class="text-uppercase mb-2 mt-1">@Titulo</h2>
+
+<EditForm Model="Request" OnValidSubmit="OnBotonSubmit">
+    <DataAnnotationsValidator />
+
+
+    <div class="row">
+        <div class="col-3">
+            <div class="mb-3">
+                <label for="nombre" class="form-label">Nombre</label>
+                <InputText class="form-control" id="nombre" @bind-Value="Request.Nombre" />
+                <ValidationMessage For="() => Request.Nombre" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="mb-3">
+                <label for="ApellidoPaterno" class="form-label">Apellido Paterno</label>
+                <InputText class="form-control" id="ApellidoPaterno" @bind-Value="Request.ApellidoPaterno" />
+                <ValidationMessage For="() => Request.ApellidoPaterno" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="mb-3">
+                <label for="ApellidoMaterno" class="form-label">Apellido Materno</label>
+                <InputText class="form-control" id="ApellidoMaterno" @bind-Value="Request.ApellidoMaterno" />
+                <ValidationMessage For="() => Request.ApellidoMaterno" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="mb-3">
+                <label for="TelefonoCelular" class="form-label">Teléfono Celular</label>
+                <input type="text" class="form-control" id="TelefonoCelular" @bind-value="Request.TelefonoCelular">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <div class="mb-3">
+                <label for="DireccionDomicilio" class="form-label">Dirección Domicilio</label>
+                <input type="text" class="form-control" id="DireccionDomicilio" @bind-value="Request.DireccionDomicilio">
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-3">
+        <div class="col-auto">
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-floppy me-1"></i>@NombreBoton</button>
+            </div>
+        </div>
+        <div class="col-auto">
+            <a class="btn btn-primary" href="categorias/list"><i class="bi bi-backspace me-1"></i>Regresar</a>
+        </div>
+    </div>
+    <ValidationSummary />
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public string Titulo { get; set; } = "Categoria";
+
+    [Parameter]
+    public string NombreBoton { get; set; } = "Guardar";
+
+    [Parameter]
+    public PersonaDtoRequest Request { get; set; } = new();
+
+    [Parameter]
+    public EventCallback OnBotonSubmit { get; set; }
+}

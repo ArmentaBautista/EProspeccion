@@ -1,0 +1,23 @@
+﻿@page "/Personas/new"
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Usuario,Administrador")]
+
+<PageTitle>Registro de Personas</PageTitle>
+
+<PersonaEditComponent NombreBoton="Guardar" 
+                        Titulo="Registro de Persona" 
+                        Request="Model" 
+                        OnBotonSubmit="Guardar" />
+
+@code {
+
+    public PersonaDtoRequest Model { get; set; } = new();
+
+    private async Task Guardar()
+    {
+        await HttpClient.PostAsJsonAsync("api/Personas", Model);
+        NavigationManager.NavigateTo("/Personas");
+    }
+
+}
