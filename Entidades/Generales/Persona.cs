@@ -21,6 +21,5 @@ namespace Entidades.Generales
 		public string TelefonoCasa {  get; set; } = string.Empty;
 		public string TelefonoTrabajo { get; set; } = string.Empty;		
 		public string TelefonoContacto { get; set; } = string.Empty;
-		public short IdEstatus { get; set; } = 1;
 	}
 }

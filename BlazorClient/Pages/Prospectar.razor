@@ -2,11 +2,12 @@
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 @inject SweetAlertService Swal
+@inject IToastService ToastService
 
 <PageTitle>Prospección de Personas</PageTitle>
 <h3>Gestiones</h3>
 
-<NavLink class="btn btn-primary mb-5" href="productos/new"><i class="bi bi-plus-circle me-1"></i>Nuevo</NavLink>
+<NavLink class="btn btn-primary mb-5" href="Gestiones/new"><i class="bi bi-window-plus me-1"></i>Nueva Gestión</NavLink>
 
 <div class="container-fluid">
     <div class="row">
@@ -22,13 +23,15 @@
         </div>
     </div>
     <div class="row mt-3">
-        <table class="table table-bordered table-hover">
+        <table class="table table-bordered table-light">
             <thead>
                 <tr class="table-dark">
-                    <td>Nombre</td>
-                    <td>Precio</td>
-                    <td>Categoria</td>
-                    <td>Marca</td>
+                    <td>Id</td>
+                    <td>Persona</td>
+                    <td>Actividad</td>
+                    <td>Resultado</td>
+                    <td>Fecha</td>
+                    <td>Hora</td>
                     <td>Acciones</td>
                 </tr>
             </thead>
@@ -46,10 +49,12 @@
                     @foreach (var item in Lista)
                     {
                     <tr>
+                        <td>@item.Id</td>
                         <td>@item.Nombre</td>
-                        <td>$ @item.Precio.ToString("N2")</td>
-                        <td>@item.Categoria</td>
-                        <td>@item.Marca</td>
+                        <td>@item.Actividad</td>
+                        <td>@item.Resultado</td>
+                        <td>@item.Fecha.ToShortDateString()</td>
+                        <td>@item.Hora.ToShortTimeString()</td>
                         <td>
                             <button class="btn btn-primary" @onclick="() => Editar(item.Id)"><i class="bi bi-pencil-square"></i></button>
                             <button class="btn btn-danger" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash"></i></button>
@@ -66,7 +71,7 @@
 
 @code {
 
-    public ICollection<ProductoDtoResponse>? Lista { get; set; }
+    public ICollection<GestionDtoResponse>? Lista { get; set; }
     public string? Filtro { get; set; }
     public bool Cargando { get; set; }
 
@@ -80,7 +85,7 @@
         try
         {
             Cargando = true;
-            Lista = await HttpClient.GetFromJsonAsync<ICollection<ProductoDtoResponse>>($"api/Productos?filtro={Filtro}");
+            Lista = await HttpClient.GetFromJsonAsync<ICollection<GestionDtoResponse>>($"api/Gestiones?filtro={Filtro}");
         }
         catch (Exception ex)
         {
@@ -94,7 +99,10 @@
 
     private void Editar(int id)
     {
-        NavigationManager.NavigateTo($"/productos/edit/{id}");
+        ToastService.ShowError($"Ups! No se permite la edición de Gestiones, en su lugar registre una nueva");
+        NavigationManager.NavigateTo($"/Gestiones");
+
+        NavigationManager.NavigateTo($"/Gestiones/edit/{id}");
     }
 
     private async Task Eliminar(int id)
@@ -111,7 +119,7 @@
 
         if (result.IsConfirmed)
         {
-            await HttpClient.DeleteAsync($"api/Productos/{id}");
+            await HttpClient.DeleteAsync($"api/Gestiones/{id}");
             await Buscar();
         }
     }

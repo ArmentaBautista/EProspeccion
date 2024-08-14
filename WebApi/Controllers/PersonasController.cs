@@ -117,8 +117,9 @@ namespace WebApi.Controllers
 		{
             _logger.LogInformation($"Persona {id}");
             await _repository.DeleteAsync(id);
+            _logger.LogInformation($"Persona {id} BORRADA");
 
-			return Ok();
+            return Ok();
 		}
 
 	}

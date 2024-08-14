@@ -8,6 +8,8 @@ namespace Entidades.Generales
 {
 	public class Gestion:EntidadBase
 	{
+		
+		public int IdPersona {  get; set; }
 		public Persona Persona {  get; set; }
 		public string Actividad {  get; set; }
 		public string Resultado { get; set; }

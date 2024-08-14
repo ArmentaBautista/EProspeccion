@@ -1,0 +1,87 @@
+﻿@inject SweetAlertService Swal
+@using System.ComponentModel.DataAnnotations
+
+<h3 class="mb-5">@Titulo</h3>
+
+<EditForm Model="Model" OnValidSubmit="BotonGrabar">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="row">
+            <div class="col-5">
+                <div class="container">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="Persona" class="form-label">Persona:</label>
+                            <InputSelect class="form-select" id="Persona" @bind-Value="Model.IdPersona">
+                                <option>-Seleccione la Persona-</option>
+                                @if (Personas is not null)
+                                {
+                                    @foreach (var item in Personas)
+                                    {
+                                        <option value="@item.Id">@item.Nombre</option>
+                                    }
+                                }
+                            </InputSelect>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="Actividad" class="form-label">Actividad:</label>
+                            <InputTextArea class="form-control-plaintext" id="Actividad" @bind-Value="Model.Actividad">
+                            </InputTextArea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="Resultado" class="form-label">Resultado:</label>
+                            <InputTextArea class="form-control-plaintext" id="Resultado" @bind-Value="Model.Resultado">
+                            </InputTextArea>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="Fecha" class="form-label">Fecha:</label>
+                            <InputDate Type="InputDateType.Date" class="form-text" id="Fecha" @bind-Value="Model.Fecha">
+							</InputDate>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="Hora" class="form-label">Hora:</label>
+                            <InputDate Type="InputDateType.Time" class="form-eliment jds-d-inline-block jds-max-width150" id="Hora" @bind-Value="Model.Hora">
+                            </InputDate>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+        <div class="row row-cols-4">
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-floppy me-1"></i>Guardar</button>
+            </div>
+            <div class="col-auto">
+                <a class="btn btn-outline-primary" href="productos/list"><i class="bi bi-backspace me-1"></i>Regresar</a>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
+@code {
+
+    [Parameter]
+    [EditorRequired]
+    public GestionDtoRequest Model { get; set; } = new();
+
+    [Parameter]
+    public ICollection<PersonaDTOResponse>? Personas { get; set; }
+
+    [Parameter]
+    public EventCallback BotonGrabar { get; set; }
+
+    [Parameter]
+    public string Titulo { get; set; } = "Gestiones";
+
+}
+

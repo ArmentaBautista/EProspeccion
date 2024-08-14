@@ -23,15 +23,17 @@ namespace Repositories.Implementaciones
 		public async Task<ICollection<GestionInfo>> ListAsync(string filtro)
 		{
 			var gestiones = Context.Set<Gestion>()
-			.Where(p => p.Persona.Nombre.Contains(filtro))
+			.Where(p => p.Actividad.Contains(filtro))
 			.Select(x => new GestionInfo
 			{
+				Id = x.Id,
 				Nombre = $"{x.Persona.Nombre} {x.Persona.ApellidoPaterno} {x.Persona.ApellidoMaterno}",
 				Actividad = x.Actividad,
 				Resultado = x.Resultado,
 				Fecha = x.Fecha,
 				Hora = x.Hora
 			})
+			
 			.AsNoTracking()
 			.AsQueryable();
 

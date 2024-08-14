@@ -1,0 +1,35 @@
+﻿@page "/Gestiones/new"
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles ="Usuario,Administrador")]
+
+<ProspectarEditComponent Model="Request"
+                       Titulo="Registrar nueva Gestión"
+                       BotonGrabar="BotonGuardar"
+                         Personas="Personas"/>
+
+@code {
+
+    public GestionDtoRequest Request { get; set; } = new();
+
+    public ICollection<PersonaDTOResponse>? Personas { get; set; } 
+
+    protected override async Task OnInitializedAsync()
+    {
+        Personas = await HttpClient.GetFromJsonAsync<ICollection<PersonaDTOResponse>>("api/Personas");
+
+    }
+
+    private async Task BotonGuardar()
+    {
+        var response = await HttpClient.PostAsJsonAsync("api/Gestiones", Request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            NavigationManager.NavigateTo("Gestiones");
+        }
+    }
+
+}
+

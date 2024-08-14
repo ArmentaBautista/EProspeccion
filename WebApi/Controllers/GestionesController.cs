@@ -71,7 +71,7 @@ namespace WebApi.Controllers
 			var entity = new Gestion
 			{
 				Id = request.Id,
-				Persona=new Persona() {Id=request.IdPersona },
+				IdPersona=request.IdPersona ,
 				Actividad = request.Actividad,
 				Resultado = request.Resultado,
 				Fecha = request.Fecha,
