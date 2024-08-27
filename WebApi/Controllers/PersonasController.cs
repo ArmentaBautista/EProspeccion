@@ -6,12 +6,13 @@ using Repositories.Interfaces;
 using Dto.Request;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Dto.Response;
+using Dto;
 
 namespace WebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize(Roles = "Administrador")]
+	[Authorize(Roles = Constantes.RolUsuario)]
 	public class PersonasController : ControllerBase
 	{
 		private readonly IPersonaRepository _repository;
@@ -26,7 +27,7 @@ namespace WebApi.Controllers
 		// GET: api/Personas
 		[HttpGet]
 		[AllowAnonymous]
-		public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get()
 		{
 			var personas = await _repository.ListMinimalAsync();
 			var personasDto = personas.Select(x => new PersonaDTOResponse
@@ -62,8 +63,8 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
-		public async Task<IActionResult> Post(PersonaDtoRequest request)
+        [Authorize(Roles = "Usuario,Administrador")]
+        public async Task<IActionResult> Post(PersonaDtoRequest request)
 		{
 			var persona = new Persona
 			{
@@ -112,7 +113,6 @@ namespace WebApi.Controllers
 		}
 
 		[HttpDelete("{id:int}")]
-        [AllowAnonymous]
         public async Task<IActionResult> Delete(int id)
 		{
             _logger.LogInformation($"Persona {id}");

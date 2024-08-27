@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class InicialEntidades : Migration
+    public partial class inicial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,7 +30,9 @@ namespace DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    NombreCompleto = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApellidoPaterno = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ApellidoMaterno = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -52,24 +54,6 @@ namespace DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Gestiones",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Actividad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Resultado = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Fecha = table.Column<DateOnly>(type: "date", nullable: false),
-                    Hora = table.Column<TimeOnly>(type: "time", nullable: false),
-                    Alta = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IdEstatus = table.Column<short>(type: "smallint", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Gestiones", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Personas",
                 columns: table => new
                 {
@@ -86,14 +70,32 @@ namespace DataAccess.Migrations
                     TelefonoCasa = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TelefonoTrabajo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TelefonoContacto = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IdEstatus = table.Column<short>(type: "smallint", nullable: false),
                     Fecha = table.Column<DateOnly>(type: "date", nullable: false),
                     Hora = table.Column<TimeOnly>(type: "time", nullable: false),
-                    Alta = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Alta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdEstatus = table.Column<short>(type: "smallint", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Personas", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Usuarios",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NombreUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fecha = table.Column<DateOnly>(type: "date", nullable: false),
+                    Hora = table.Column<TimeOnly>(type: "time", nullable: false),
+                    Alta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdEstatus = table.Column<short>(type: "smallint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Usuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,6 +204,31 @@ namespace DataAccess.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Gestiones",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    IdPersona = table.Column<int>(type: "int", nullable: false),
+                    Actividad = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Resultado = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Fecha = table.Column<DateOnly>(type: "date", nullable: false),
+                    Hora = table.Column<TimeOnly>(type: "time", nullable: false),
+                    Alta = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdEstatus = table.Column<short>(type: "smallint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Gestiones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Gestiones_Personas_IdPersona",
+                        column: x => x.IdPersona,
+                        principalTable: "Personas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -240,6 +267,11 @@ namespace DataAccess.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Gestiones_IdPersona",
+                table: "Gestiones",
+                column: "IdPersona");
         }
 
         /// <inheritdoc />
@@ -264,13 +296,16 @@ namespace DataAccess.Migrations
                 name: "Gestiones");
 
             migrationBuilder.DropTable(
-                name: "Personas");
+                name: "Usuarios");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Personas");
         }
     }
 }

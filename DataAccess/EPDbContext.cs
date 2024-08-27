@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Entidades;
+using Entidades.Sistema;
 
 namespace DataAccess
 {
@@ -17,8 +18,9 @@ namespace DataAccess
 
 		public DbSet<Persona> Personas { get; set; } = default!;
 		public DbSet<Gestion> Gestiones { get; set; } = default!;
+        public DbSet<Usuario> Usuarios { get; set; } = default!;
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			base.OnModelCreating(modelBuilder);
 			// aplicamos una configuracion personalizada de entidades

@@ -1,6 +1,7 @@
 ﻿@page "/Personas/new"
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize(Roles = "Usuario,Administrador")]
 
 <PageTitle>Registro de Personas</PageTitle>

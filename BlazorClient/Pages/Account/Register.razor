@@ -1,4 +1,4 @@
-﻿@page "/account/register"
+﻿@page "/usuarios/register"
 @using BlazorClient.Proxy
 @inject IUserProxy UserProxy
 @inject NavigationManager NavigationManager
@@ -86,7 +86,7 @@
 
             ToastService.ShowSuccess("Su cuenta ha sido creada exitosamente");
 
-            NavigationManager.NavigateTo("/account/login");
+            NavigationManager.NavigateTo("/usuarios/login");
         }
         catch (Exception ex)
         {

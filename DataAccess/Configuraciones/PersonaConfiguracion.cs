@@ -14,6 +14,9 @@ namespace DataAccess.Configuraciones
 	{
 		public void Configure(EntityTypeBuilder<Persona> builder)
 		{
+			builder.HasMany<Gestion>()
+				.WithOne("Persona")
+				.HasForeignKey(x=>x.IdPersona);
 			builder.Property(p => p.Rfc)
 				.HasMaxLength(13);
 		}

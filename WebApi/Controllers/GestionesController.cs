@@ -6,12 +6,13 @@ using Repositories.Interfaces;
 using Dto.Request;
 using Dto.Response;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Dto;
 
 namespace WebApi.Controllers
 {
 	[ApiController]
 	[Route("api/[controller]")]
-	[Authorize(Roles ="Administrador")]
+	[Authorize(Roles =Constantes.RolUsuario)]
 	public class GestionesController : Controller
 	{
 		private readonly IGestionRepository _repository;
@@ -26,8 +27,8 @@ namespace WebApi.Controllers
 		}
 
 		[HttpGet]
-		[AllowAnonymous]
-		public async Task<IActionResult> Get(string? filtro)
+        [Authorize(Roles = Constantes.RolAdministrador)]
+        public async Task<IActionResult> Get(string? filtro)
 		{
 			var coleccion = await _repository.ListAsync(filtro ?? string.Empty);
 
@@ -45,7 +46,6 @@ namespace WebApi.Controllers
 		}
 
 		[HttpGet("{id:int}")]
-		[AllowAnonymous]
 		public async Task<IActionResult> Get(int id)
 		{
 			var entity = await _repository.FindByIdAsync(id);
@@ -65,8 +65,8 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPost]
-		[AllowAnonymous]
-		public async Task<IActionResult> Post(GestionDtoRequest request)
+        [Authorize(Roles = Constantes.RolAdministrador)]
+        public async Task<IActionResult> Post(GestionDtoRequest request)
 		{
 			var entity = new Gestion
 			{

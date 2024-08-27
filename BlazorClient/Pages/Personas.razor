@@ -1,8 +1,10 @@
 ﻿@page "/Personas"
+@using System.Diagnostics
 
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 @inject SweetAlertService Swal
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Personas (Aspirantes / Socios)</PageTitle>
 <h3>Lista de Personas</h3>
@@ -40,8 +42,11 @@ else
 					<td>@item.TelefonoCelular</td>
 					<td>@item.DireccionDomicilio</td>
 					<td>
+
+
 						<button class="btn btn-primary" @onclick="() => Editar(item.Id)"><i class="bi bi-pencil-square"></i></button>
-						<button class="btn btn-danger" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash3-fill"></i></button>
+						<button class="btn btn-danger" hidden="@EsAdmin" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash3-fill"></i></button>
+						
 					</td>
 				</tr>
 			}
@@ -50,6 +55,8 @@ else
 }
 
 @code {
+	private bool EsAdmin = false;
+
 	public ICollection<PersonaDTOResponse>? Lista { get; set; }
 
 	protected override async Task OnInitializedAsync()
@@ -68,12 +75,23 @@ else
 					TelefonoCelular = "2451023027"
 				});
 		}
+
+		try
+		{
+			var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+			EsAdmin = authState.User.IsInRole("Administrador");
+		}
+		catch (Exception ex)
+		{
+			Debug.WriteLine(ex.Message);
+		}
 	}
 
 	private void Editar(int id)
 	{
 		NavigationManager.NavigateTo($"/Personas/edit/{id}");
 	}
+
 
 	private async Task Eliminar(int id)
 	{

@@ -13,7 +13,7 @@ namespace DataAccess.Configuraciones
 	{
 		public void Configure(EntityTypeBuilder<Gestion> builder)
 		{
-			builder.HasOne<Persona>(p => p.Persona).WithOne().HasForeignKey<Persona>(p => p.Id);
+			
 			builder.Property(p => p.Actividad)
 				.HasMaxLength(100);
 			builder.Property(p => p.Resultado)
