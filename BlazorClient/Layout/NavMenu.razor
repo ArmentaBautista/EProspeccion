@@ -4,7 +4,7 @@
 
 
 <div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
+    <div class="container-fluid" align="justify">
         <a class="navbar-brand" href="">Prospección</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
@@ -14,32 +14,43 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div>
+	    <div class="nav-item px-3">
+		    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+			    <span class="bi bi-house-door-fill-nav-menu" style="align-content:center" aria-hidden="true"></span> Inicio
+		    </NavLink>
+	    </div>
+		
+	    <div>
             <AuthorizeView>
-                <Authorized>
-                    <NavLink class="navbar-text text-white">
-                        <i class="bi bi-person-circle me-1"></i> @context.User.Identity!.Name
-                    </NavLink>
-                    <div class="nav-item px-3">
-                        <NavLink class="nav-link" href="Personas">
-                            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Personas
-                        </NavLink>
-                    </div>
-                    <div class="nav-item px-3">
-                        <NavLink class="nav-link" href="Prospectar">
-                            <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Prospectar
-                        </NavLink>
-                    </div>
-                    <button class="btn btn-outline-info" @onclick="CerrarSesion"><i class="bi bi-door-open me-1"></i>Salir</button>
-                </Authorized>
+	            <Authorized>
+					
+		            <div class="alert-danger" style="opacity:70%">
+						<NavLink class="navbar-text text-white">
+				            <span style="color:darkblue">
+								@context.User.Identity!.Name
+				            </span> 
+			            </NavLink>
+		            </div>
+
+
+		            <div class="nav-item px-3">
+			            <NavLink class="nav-link" href="Personas">
+				            <span class="bi bi-people-fill" aria-hidden="true"></span> Personas
+			            </NavLink>
+		            </div>
+		            <div class="nav-item px-3">
+			            <NavLink class="nav-link" href="Prospectar">
+				            <span class="bi bi-book-fill" aria-hidden="true"></span> Prospectar
+			            </NavLink>
+		            </div>
+		            <button class="btn btn-dark" @onclick="CerrarSesion" style="width=100%">
+			            <i class="bi bi-door-open me-1"></i>Salir
+		            </button>
+	            </Authorized>
+
                 <NotAuthorized>
-                    <NavLink class="btn btn-outline-info" href="usuarios/login"><i class="bi bi-box-arrow-in-right me-1"></i>Ingresar</NavLink>
-                    <NavLink class="btn btn-outline-info" href="usuarios/register"><i class="bi bi-person-add me-1"></i>Registrarse</NavLink>
+                    <NavLink class="btn btn-dark" href="usuarios/login"><i class="bi bi-box-arrow-in-right me-1"></i>Ingresar</NavLink>
+                    <NavLink class="btn btn-dark" href="usuarios/register"><i class="bi bi-person-add me-1"></i>Registrarse</NavLink>
                 </NotAuthorized>
             </AuthorizeView>
         </div>

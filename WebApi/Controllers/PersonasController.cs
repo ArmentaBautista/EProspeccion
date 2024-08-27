@@ -63,8 +63,9 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPost]
-        [Authorize(Roles = "Usuario,Administrador")]
-        public async Task<IActionResult> Post(PersonaDtoRequest request)
+		//[Authorize(Roles = "Usuario,Administrador")]
+		[AllowAnonymous]
+		public async Task<IActionResult> Post(PersonaDtoRequest request)
 		{
 			var persona = new Persona
 			{
