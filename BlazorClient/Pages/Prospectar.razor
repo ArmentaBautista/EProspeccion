@@ -3,11 +3,14 @@
 @inject NavigationManager NavigationManager
 @inject SweetAlertService Swal
 @inject IToastService ToastService
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Prospección de Personas</PageTitle>
 <h3>Gestiones</h3>
-
-<NavLink class="btn btn-primary mb-5" href="Gestiones/new"><i class="bi bi-window-plus me-1"></i>Nueva Gestión</NavLink>
+@if (!OcultarNuevo)
+{
+	<NavLink class="btn btn-primary mb-5" href="Gestiones/new"><i class="bi bi-window-plus me-1"></i>Nueva Gestión</NavLink>
+}
 
 <div class="container-fluid">
     <div class="row">
@@ -56,8 +59,7 @@
                         <td>@item.Fecha.ToShortDateString()</td>
                         <td>@item.Hora.ToShortTimeString()</td>
                         <td>
-                            <button class="btn btn-primary" @onclick="() => Editar(item.Id)"><i class="bi bi-pencil-square"></i></button>
-                            <button class="btn btn-danger" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash"></i></button>
+                           <button class="btn btn-danger" hidden="@OcultarBorrado" @onclick="() => Eliminar(item.Id)"><i class="bi bi-trash"></i></button>
                         </td>
                     </tr>
                     }
@@ -70,6 +72,8 @@
 <LoadingComponent IsLoading="Cargando" />
 
 @code {
+	private bool OcultarNuevo = false;
+	private bool OcultarBorrado = false;
 
     public ICollection<GestionDtoResponse>? Lista { get; set; }
     public string? Filtro { get; set; }
@@ -78,6 +82,17 @@
     protected override async Task OnInitializedAsync()
     {
         await Buscar();
+        try
+        {
+	        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+	        OcultarNuevo = !authState.User.IsInRole("Usuario");
+            OcultarBorrado = authState.User.IsInRole("Usuario");
+			
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+        }
     }
 
     private async Task Buscar()
@@ -97,6 +112,7 @@
         }
     }
 
+    [Obsolete]
     private void Editar(int id)
     {
         ToastService.ShowError($"Ups! No se permite la edición de Gestiones, en su lugar registre una nueva");

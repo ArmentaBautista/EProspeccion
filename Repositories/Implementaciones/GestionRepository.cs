@@ -23,7 +23,7 @@ namespace Repositories.Implementaciones
 		public async Task<ICollection<GestionInfo>> ListAsync(string filtro)
 		{
 			var gestiones = Context.Set<Gestion>()
-			.Where(p => p.Actividad.Contains(filtro))
+			.Where(p => p.Actividad.Contains(filtro) && p.IdEstatus==1)
 			.Select(x => new GestionInfo
 			{
 				Id = x.Id,
