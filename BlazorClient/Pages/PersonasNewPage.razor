@@ -18,7 +18,7 @@
     private async Task Guardar()
     {
         await HttpClient.PostAsJsonAsync("api/Personas", Model);
-        NavigationManager.NavigateTo("/Personas");
+        NavigationManager.NavigateTo("/Personas",false);
     }
 
 }

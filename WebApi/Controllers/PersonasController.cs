@@ -12,7 +12,6 @@ namespace WebApi.Controllers
 {
 	[Route("api/[controller]")]
 	[ApiController]
-	[Authorize(Roles = Constantes.RolUsuario)]
 	public class PersonasController : ControllerBase
 	{
 		private readonly IPersonaRepository _repository;
@@ -26,7 +25,7 @@ namespace WebApi.Controllers
 
 		// GET: api/Personas
 		[HttpGet]
-		[AllowAnonymous]
+        [Authorize(Roles = "Usuario,Administrador")]
         public async Task<IActionResult> Get()
 		{
 			var personas = await _repository.ListMinimalAsync();
@@ -50,7 +49,8 @@ namespace WebApi.Controllers
 		}
 
 		[HttpGet("{id:int}")]
-		public async Task<IActionResult> Get(int id)
+        [Authorize(Roles = "Usuario,Administrador")]
+        public async Task<IActionResult> Get(int id)
 		{
 			var entity = await _repository.FindByIdAsync(id);
 
@@ -63,8 +63,7 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPost]
-		//[Authorize(Roles = "Usuario,Administrador")]
-		[AllowAnonymous]
+		[Authorize(Roles = "Administrador")]
 		public async Task<IActionResult> Post(PersonaDtoRequest request)
 		{
 			var persona = new Persona
@@ -88,7 +87,9 @@ namespace WebApi.Controllers
 		}
 
 		[HttpPut("{id:int}")]
-		public async Task<IActionResult> Put(int id, PersonaDtoRequest request)
+        [Authorize(Roles = "Administrador")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Put(int id, PersonaDtoRequest request)
 		{
 			var entity = await _repository.FindByIdAsync(id);
 			if (entity is null)
@@ -114,6 +115,7 @@ namespace WebApi.Controllers
 		}
 
 		[HttpDelete("{id:int}")]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Delete(int id)
 		{
             _logger.LogInformation($"Persona {id}");

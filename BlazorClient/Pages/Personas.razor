@@ -15,7 +15,7 @@
 
 @if (Lista is null)
 {
-	<p>Cargando...</p>
+	<p>Sin datos para mostrar</p>
 }
 else
 {
@@ -79,7 +79,8 @@ else
 		try
 		{
 			var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-			EsAdmin = authState.User.IsInRole("Administrador");
+			EsAdmin = authState.User.IsInRole("Usuario");
+			
 		}
 		catch (Exception ex)
 		{
