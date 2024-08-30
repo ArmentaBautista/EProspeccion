@@ -25,6 +25,7 @@
         <div class="col-1">
 	        <button type="button" class="btn btn-primary" @onclick="Buscar"><i class="bi bi-search"></i></button>
 	        <button type="button" class="btn btn-primary" @onclick="(()=>Exportar())"><i class="bi bi-file-excel"></i></button>
+	        <button type="button" class="btn btn-primary" @onclick="(()=>ExportarFormato())"><i class="bi bi-file-earmark-excel"></i></button>
         </div>
     </div>
     <div class="row mt-3">
@@ -144,13 +145,21 @@
 
     private async Task Exportar()
     {
-        var response = await HttpClient.GetAsync("api/Excel/Exportar");
+        var response = await HttpClient.GetAsync($"api/Excel/ExportarSimple");
 	    var fileStream = response.Content.ReadAsStream();
 	    using var streamRef = new DotNetStreamReference(stream: fileStream);
-	    await Js.InvokeVoidAsync("downloadFileFromStream", "GestoresGestiones.xlsx", streamRef);
+	    await Js.InvokeVoidAsync("downloadFileFromStream", "Gestiones.xlsx", streamRef);
  
     }
 
+    private async Task ExportarFormato()
+    {
+        var response = await HttpClient.GetAsync($"api/Excel/ExportarConFormato");
+	    var fileStream = response.Content.ReadAsStream();
+	    using var streamRef = new DotNetStreamReference(stream: fileStream);
+	    await Js.InvokeVoidAsync("downloadFileFromStream", "ReporteGestiones.xlsx", streamRef);
+ 
+    }
 
 }
 
