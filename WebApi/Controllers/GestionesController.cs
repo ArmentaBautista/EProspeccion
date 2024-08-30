@@ -18,7 +18,8 @@ namespace WebApi.Controllers
 		private readonly ILogger<GestionesController> _logger;
 
 
-        public GestionesController(IGestionRepository repository, ILogger<GestionesController> logger)
+        public GestionesController(IGestionRepository repository,
+            ILogger<GestionesController> logger)
         {
 			_repository = repository;
 			_logger = logger;

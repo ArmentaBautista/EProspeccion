@@ -4,6 +4,7 @@
 @inject SweetAlertService Swal
 @inject IToastService ToastService
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IJSRuntime Js
 
 <PageTitle>Prospección de Personas</PageTitle>
 <h3>Gestiones</h3>
@@ -22,7 +23,8 @@
 
         </div>
         <div class="col-1">
-            <button type="button" class="btn btn-primary" @onclick="Buscar"><i class="bi bi-search"></i></button>
+	        <button type="button" class="btn btn-primary" @onclick="Buscar"><i class="bi bi-search"></i></button>
+	        <button type="button" class="btn btn-primary" @onclick="(()=>Exportar())"><i class="bi bi-file-excel"></i></button>
         </div>
     </div>
     <div class="row mt-3">
@@ -139,5 +141,16 @@
             await Buscar();
         }
     }
+
+    private async Task Exportar()
+    {
+        var response = await HttpClient.GetAsync("api/Excel/Exportar");
+	    var fileStream = response.Content.ReadAsStream();
+	    using var streamRef = new DotNetStreamReference(stream: fileStream);
+	    await Js.InvokeVoidAsync("downloadFileFromStream", "GestoresGestiones.xlsx", streamRef);
+ 
+    }
+
+
 }
 
