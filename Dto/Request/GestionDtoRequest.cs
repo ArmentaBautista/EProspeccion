@@ -19,5 +19,9 @@ namespace Dto.Request
 		public string Resultado { get; set; }=string.Empty;
 		public DateOnly Fecha { get; set; }
 		public TimeOnly Hora { get; set; }
-	}
+
+        public Double Latitud { get; set; } = 0;
+        public Double Longitud { get; set; } = 0;
+
+    }
 }

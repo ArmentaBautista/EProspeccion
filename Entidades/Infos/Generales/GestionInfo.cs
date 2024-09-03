@@ -13,6 +13,8 @@ namespace Entidades.Infos.Generales
 		public string Actividad {  get; set; } = string.Empty;
 		public string Resultado { get; set; } = string.Empty;
 		public DateOnly Fecha { get; set; }
-		public TimeOnly Hora {  get; set; } 
-	}
+		public TimeOnly Hora {  get; set; }
+        public double Latitud { get; set; }
+        public double Longitud { get; set; }
+    }
 }

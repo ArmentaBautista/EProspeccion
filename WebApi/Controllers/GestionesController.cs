@@ -76,7 +76,9 @@ namespace WebApi.Controllers
 				Actividad = request.Actividad,
 				Resultado = request.Resultado,
 				Fecha = request.Fecha,
-				Hora = request.Hora
+				Hora = request.Hora,
+				Latitud = request.Latitud,
+				Longitud = request.Longitud
 			};
 
 			await _repository.AddAsync(entity);

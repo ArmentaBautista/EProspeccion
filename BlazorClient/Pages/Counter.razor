@@ -1,18 +1,37 @@
 ﻿@page "/counter"
+@using System.Runtime.CompilerServices
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Counter</PageTitle>
 
-<h1>Counter</h1>
+<RealTimeMap Parameters="parameters" height="460px" width="620px" OnClickMap="onClickMap"></RealTimeMap>
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<div>
+	<text>@Latitud</text>
+	<p></p>
+	<text>@Longitud</text>
+</div>
 
 @code {
-    private int currentCount = 0;
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+	private double Latitud=0;
+	private double Longitud=0;
+
+	RealTimeMap.LoadParameters parameters = new RealTimeMap.LoadParameters()  
+	{
+		location = new RealTimeMap.Location()
+		{
+				latitude = 18.89627256458414,
+				longitude = -96.94860984283237,
+		},
+		zoomLevel = 18
+	};
+
+	public void onClickMap(RealTimeMap.ClicksMapArgs value)
+	{
+		Latitud= value.location.latitude;
+		Longitud = value.location.longitude;
+	}
+
+	
 }

@@ -13,5 +13,7 @@ namespace Entidades.Generales
 		public Persona Persona {  get; set; }
 		public string Actividad {  get; set; }
 		public string Resultado { get; set; }
-	}
+		public double Latitud { get; set; }
+        public double Longitud { get; set; }
+    }
 }

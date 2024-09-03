@@ -31,9 +31,10 @@ namespace Repositories.Implementaciones
 				Actividad = x.Actividad,
 				Resultado = x.Resultado,
 				Fecha = x.Fecha,
-				Hora = x.Hora
+				Hora = x.Hora,
+				Latitud = x.Latitud,
+				Longitud =  x.Longitud
 			})
-			
 			.AsNoTracking()
 			.AsQueryable();
 
